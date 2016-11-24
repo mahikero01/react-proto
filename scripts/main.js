@@ -1,11 +1,13 @@
 var CommentBox = React.createClass({
     render: function(){
         return (
-            <div className="commentBox">
-                <h2>Comments</h2>
-                <CommentList />
-                <h2>Add a Comment</h2>
-                <CommentForm />
+            <div className="commentBox container">
+                <Panel title="Comments">
+                    <CommentList />
+                </Panel>
+                <Panel title="Add a Comment">
+                    <CommentForm />
+                </Panel>
             </div>
         );
     }
@@ -34,10 +36,20 @@ var CommentForm = React.createClass({
 
 var Comment = React.createClass({
     render: function(){
-        return(
+        return (
+            <Panel title={this.props.author}>
+                {this.props.children}
+            </Panel>
+        );
+    }
+});
+
+var Panel = React.createClass({
+    render: function(){
+        return (
             <div className="panel panel-default comment">
                 <div className="panel-heading">
-                    {this.props.author}
+                    {this.props.title}
                 </div>
                 <div className="panel-body">
                     {this.props.children}
