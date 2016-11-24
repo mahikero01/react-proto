@@ -1,9 +1,14 @@
+var data = [
+    {"author": "Ted", "text": "First"},
+    {"author": "Daniel", "text": "Hello World"}
+];
+
 var CommentBox = React.createClass({
     render: function(){
         return (
             <div className="commentBox container">
                 <Panel title="Comments">
-                    <CommentList />
+                    <CommentList data={this.props.data}/>
                 </Panel>
                 <Panel title="Add a Comment">
                     <CommentForm />
@@ -17,8 +22,11 @@ var CommentList = React.createClass({
     render: function(){
         return (
             <div className="commentList">
-                <Comment author="Ted">First...</Comment>
-                <Comment author="Daniel">Hellow World</Comment>
+                {this.props.data.map(function(c){
+                    return <Comment author={c.author}>
+                        {c.text}
+                    </Comment>
+                })}
             </div>
         );
     }
@@ -27,9 +35,18 @@ var CommentList = React.createClass({
 var CommentForm = React.createClass({
     render: function(){
         return (
-            <div className="commentForm">
-                CommentForm
-            </div>
+            <form className="commentForm" onSubmit={this.handleSubmit}>
+                <div className="form-group">
+                    <label htmlFor="name">Author:</label>
+                    <input type="text" className="form-control" ref="author" />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="text">Text:</label>
+                    <textarea className="form-control" rows="3" ref="text" >
+                    </textarea>
+                </div>
+                <input type="submit" value="Post" className="btn"/>
+            </form>
         );
     }
 });
@@ -60,6 +77,6 @@ var Panel = React.createClass({
 });
 
 ReactDOM.render(
-    <CommentBox />,
+    <CommentBox data={data}/>,
     document.getElementById('content')
 );
