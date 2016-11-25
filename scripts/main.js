@@ -4,14 +4,22 @@ var data = [
 ];
 
 var CommentBox = React.createClass({
+    getInitialState: function(){
+        return {data: this.props.data}
+    },
+    handleCommentSubmit: function(comment){
+        var dataNew = this.state.data;
+        dataNew.push(comment);
+        this.setState({data:dataNew});
+    },
     render: function(){
         return (
             <div className="commentBox container">
                 <Panel title="Comments">
-                    <CommentList data={this.props.data}/>
+                    <CommentList data={this.state.data}/>
                 </Panel>
                 <Panel title="Add a Comment">
-                    <CommentForm />
+                    <CommentForm onCommentSubmit={this.handleCommentSubmit}/>
                 </Panel>
             </div>
         );
@@ -33,6 +41,22 @@ var CommentList = React.createClass({
 });
 
 var CommentForm = React.createClass({
+    handleSubmit: function(e){
+        e.preventDefault();
+
+        var author = this.refs.author.value.trim();
+        var text = this.refs.text.value.trim();
+
+        if (!text || !author) {
+            return;
+        }
+
+        this.props.onCommentSubmit({author:author, text:text});
+
+        this.refs.author.value = '';
+        this.refs.text.value = '';
+        return;
+    },
     render: function(){
         return (
             <form className="commentForm" onSubmit={this.handleSubmit}>
